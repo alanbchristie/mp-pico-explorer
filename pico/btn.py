@@ -31,7 +31,11 @@ def _btn_callback(pin):
 
     # What GPIO pin is this?
     # We have to interrogate the string representation!
-    pin_id: int = int(str(pin)[4:-1].split(',')[0])
+    # The string representation will be...
+    #   "Pin(12, [...])"
+    # ...so we just look from the 5th character (index 4)
+    # and split at the comma...
+    pin_id: int = int(str(pin)[4:-1].split(',', maxsplit=1)[0])
     if pin_id == 12:
         _BTN_A_REQUEST = True
     elif pin_id == 13:
