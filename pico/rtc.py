@@ -5,7 +5,7 @@ on your Pico, which gives us you the pimoroni_i2c and breakout_rtc modules.
 
 See also: https://www.hardill.me.uk/wordpress/category/projects/
 """
-# pylint: disable=import-error, global-statement, duplicate-code
+# pylint: disable=import-error, duplicate-code
 
 # The Pico/MicroPython may not have the typing module
 try:
@@ -43,8 +43,6 @@ _DOTW: List[str] = ['-', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 def _rtc() -> NoReturn:
     """Just call the RTC, printing the latest time whenever it changes.
     """
-    global _RTC
-
     # The current time.
     # Bank to force a print on the first call.
     str_time_current: str = ''
