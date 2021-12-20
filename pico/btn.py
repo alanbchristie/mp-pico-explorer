@@ -1,6 +1,6 @@
 """A simple program that connects the explorer buttons to a callback.
 It uses a sinple outer-loop to act on button presses and enact a debounce,
-This heeps the callcak (ISR) short and simple.
+This keeps the callcak (ISR) short and simple.
 """
 
 from machine import Pin
@@ -16,6 +16,7 @@ btn_y_request = False
 
 def btn_callback(pin):
     """The button callback (ISR).
+
     Here we set the corresponding button request
     variable based on the given Pin identity.
     It's up to an 'outer loop' to run the actions
@@ -72,8 +73,8 @@ def btn():
 
     while True:
     
-        # A falg, set if we've seen the request for a button.
-        # This is used to rest the request after a short delay
+        # Flags, set if we've seen the request for a button.
+        # This is used to reset the request after a short delay
         seen_a = False
         seen_b = False
         seen_x = False
@@ -100,7 +101,7 @@ def btn():
         utime.sleep_ms(1000)
         
         # Reset any button we've seen.
-        # And print a symbol indicating button hadlign is complete.
+        # And print a symbol indicating button hadling is complete.
         if seen_a:
             btn_a_request = False
         if seen_b:
