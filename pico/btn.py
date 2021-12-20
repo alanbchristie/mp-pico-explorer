@@ -4,10 +4,16 @@ It uses a simple outer-loop to act on button presses and enact a de-bounce,
 keeping the callback (ISR) short and simple.
 """
 
-# pylint: disable=import-error, global-statement
+# pylint: disable=import-error, global-statement, duplicate-code
+
+# The Pico/MicroPython may not have the typing module
+try:
+    from typing import NoReturn
+except ImportError:
+    pass
+import time  # type: ignore
 
 from machine import Pin  # type: ignore
-import utime  # type: ignore
 
 # A global boolean variable,
 # one for each explorer button.
@@ -17,7 +23,7 @@ _BTN_X_REQUEST: bool = False
 _BTN_Y_REQUEST: bool = False
 
 
-def _btn_callback(pin):
+def _btn_callback(pin) -> None:
     """The button callback (ISR).
 
     Here we set the corresponding button request
@@ -47,7 +53,7 @@ def _btn_callback(pin):
         _BTN_Y_REQUEST = True
 
 
-def _btn():
+def _btn() -> NoReturn:
     """The 'main loop'.
 
     We connect all the buttons to the callback
@@ -112,7 +118,7 @@ def _btn():
             seen_y = True
 
         # De-bounce delay
-        utime.sleep_ms(1000)
+        time.sleep(1)
 
         # Reset any button we've seen.
         # And print a symbol indicating button hadling is complete.
