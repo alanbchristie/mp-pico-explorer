@@ -1,6 +1,7 @@
 """A simple program that connects the explorer buttons to a callback.
-It uses a simple outer-loop to act on button presses and enact a debounce,
-This keeps the callback (ISR) short and simple.
+
+It uses a simple outer-loop to act on button presses and enact a de-bounce,
+keeping the callback (ISR) short and simple.
 """
 
 # pylint: disable=import-error, global-statement
@@ -47,6 +48,13 @@ def _btn_callback(pin):
 
 
 def _btn():
+    """The 'main loop'.
+
+    We connect all the buttons to the callback
+    and then enter an infinite-loop,
+    watching the 'request' variables. For each one set
+    we print a message and then (after a delay) reset the request.
+    """
     global _BTN_A_REQUEST
     global _BTN_B_REQUEST
     global _BTN_X_REQUEST
