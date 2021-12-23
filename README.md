@@ -14,8 +14,9 @@ My explorer is fitted with the following additional hardware: -
 
 This repository contains the following software demonstration files: -
 
--   `pico/btn.py` for the explorer built-in buttons
--   `pico/rtc.py` for the RV3028 RTC breakout
+- `pico/btn.py` for the explorer built-in buttons
+- `pico/rtc.py` for the RV3028 RTC breakout
+- `pico/col.py` for the BH1745 Luminance/Colour breakout
 
 ---
 
