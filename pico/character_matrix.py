@@ -10,7 +10,7 @@ try:
 except ImportError:
     pass
 
-from machine import I2C, Pin
+from machine import I2C, Pin  # type: ignore
 
 # Configured I2C Pins
 _SCL: int = 17
@@ -227,13 +227,11 @@ class LTP305:
         The charcater x position is 0 for left, 5 for right.
         The charcter is a string character or ordinal.
         """
-        if not isinstance(char, int):
-            char = ord(char)
-        char = LTP305.font[char]
+        char = LTP305.font[ord(char)]
         for char_x in range(5):
             for char_y in range(8):
-                state = char[char_x] & (0b1 << char_y)
-                self.set_pixel(x_offset + char_x, char_y, state != 0)
+                state = (char[char_x] & (0b1 << char_y)) != 0
+                self.set_pixel(x_offset + char_x, char_y, state)
 
     def show(self) -> None:
         """Update the LED matrix from the buffer.
