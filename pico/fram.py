@@ -4,7 +4,7 @@ Needs the basic built-in MicroPython.
 """
 # pylint: disable=import-error, duplicate-code
 
-from machine import I2C, Pin
+from machine import I2C, Pin  # type: ignore
 
 
 class FRAM:
