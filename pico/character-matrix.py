@@ -6,7 +6,7 @@ Here we expect MicroPython (on a Pico).
 
 # The Pico/MicroPython may not have the typing module
 try:
-    from typing import Dict, List, NoReturn
+    from typing import Optional
 except ImportError:
     pass
 import time
@@ -26,7 +26,7 @@ class LTP305:
     Pimoroni's Raspberry Pi code at https://github.com/pimoroni/ltp305-python.
     Instead of using the Pi i2c library (which we can't use on the Pico)
     we use the MicroPython i2c library.
-    
+
     The displays can use i2c address 0x61-0x63.
     """
 
@@ -151,7 +151,7 @@ class LTP305:
 
         self.set_brightness(brightness)
         self.clear()
-        
+
     def clear(self) -> None:
         """Clear both LED matrices.
 
@@ -166,11 +166,13 @@ class LTP305:
         """
         assert brightness >= 0.0
         assert brightness <= 1.0
-        
+
         self._brightness = int(brightness * 127.0)
         self._brightness = min(127, max(0, self._brightness))
         if update:
-            self._bus.writeto_mem(self._address, LTP305.CMD_BRIGHTNESS, self._brightness.to_bytes(1, 'big'))
+            self._bus.writeto_mem(self._address,
+                                  LTP305.CMD_BRIGHTNESS,
+                                  self._brightness.to_bytes(1, 'big'))
 
     def set_decimal(self,
                     left: Optional[bool] = None,
@@ -216,7 +218,7 @@ class LTP305:
         """
         assert type(chars) is str
         assert len(chars) == 2
-        
+
         self.set_character(0, chars[0])
         self.set_character(5, chars[1])
 
