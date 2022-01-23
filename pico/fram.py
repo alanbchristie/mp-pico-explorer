@@ -22,11 +22,14 @@ class FRAM:
 
         self._i2c = i2c
         self._address = address
-    
+
     def write_byte(self, offset, byte_value) -> bool:
         """Writes a single value (expected to be a byte).
         For now it's assumed to be a +ve value (including zero), i.e. 0-127
         """
+        # Max offset is 32K
+        assert offset >= 0
+        assert offset < 32_768
         assert byte_value >= 0
         assert byte_value < 128
 
@@ -42,6 +45,9 @@ class FRAM:
         """Reads a single byte, assumed to be in the range 0-127,
         returning it as an int.
         """
+        assert offset >= 0
+        assert offset < 32_768
+
         num_acks = self._i2c.writeto(self._address,
                                      bytes([offset >> 8, offset & 0xff]))
         assert num_acks == 2
@@ -58,9 +64,9 @@ if __name__ == '__main__':
     _SDA: int = 16
 
     # A MicroPython i2c object (for special/unsupported devices)
-    i2c: I2C = I2C(id=0, scl=Pin(_SCL), sda=Pin(_SDA))
+    _I2C: I2C = I2C(id=0, scl=Pin(_SCL), sda=Pin(_SDA))
 
-    fram = FRAM(i2c)
+    fram = FRAM(_I2C)
     fram.write_byte(0, 1)
     int_value = fram.read_byte(0)
     print(f'Got {int_value} from FRAM')
