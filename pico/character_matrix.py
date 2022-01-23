@@ -227,10 +227,10 @@ class LTP305:
         The charcater x position is 0 for left, 5 for right.
         The charcter is a string character or ordinal.
         """
-        char = LTP305.font[ord(char)]
+        bitmap: List[int] = LTP305.font[ord(char)]
         for char_x in range(5):
             for char_y in range(8):
-                state = (char[char_x] & (0b1 << char_y)) != 0
+                state = (bitmap[char_x] & (0b1 << char_y)) != 0
                 self.set_pixel(x_offset + char_x, char_y, state)
 
     def show(self) -> None:
