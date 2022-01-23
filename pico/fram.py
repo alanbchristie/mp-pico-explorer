@@ -40,7 +40,7 @@ class FRAM:
                   f' Got {num_acks} acks, expected 3')
 
         return num_acks != 3
-        
+
     def read_byte(self, offset) -> int:
         """Reads a single byte, assumed to be in the range 0-127,
         returning it as an int.
