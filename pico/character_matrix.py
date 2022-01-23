@@ -6,7 +6,7 @@ Here we expect MicroPython (on a Pico).
 
 # The Pico/MicroPython may not have the typing module
 try:
-    from typing import Optional
+    from typing import List, Optional
 except ImportError:
     pass
 
