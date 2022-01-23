@@ -11,7 +11,7 @@ except ImportError:
     pass
 import time
 
-from machine import I2C, Pin, Timer
+from machine import I2C, Pin
 
 # Configured I2C Pins
 _SCL: int = 17
@@ -193,60 +193,66 @@ class LTP305:
             else:
                 self._buf_matrix_right[6] &= 0b01111111
 
-    def set_pixel(self, x: int, y: int, state: bool) -> None:
+    def set_pixel(self, x_pos: int, y_pos: int, state: bool) -> None:
         """Set a single pixel on the matrix.
 
         The x position is from 0 to 9 (0-4 on left matrix, 5-9 on right).
         y is the y position and state is implied as on/off.
         """
-        if x < 5:
+        if x_pos < 5:
             # Left matrix
             if state:
-                self._buf_matrix_left[x] |= (0b1 << y)
+                self._buf_matrix_left[x_pos] |= (0b1 << y_pos)
             else:
-                self._buf_matrix_left[x] &= ~(0b1 << y)
+                self._buf_matrix_left[x_pos] &= ~(0b1 << y_pos)
         else:
             # Right matrix
-            x -= 5
+            x_pos -= 5
             if state:
-                self._buf_matrix_right[y] |= (0b1 << x)
+                self._buf_matrix_right[y_pos] |= (0b1 << x_pos)
             else:
-                self._buf_matrix_right[y] &= ~(0b1 << x)
+                self._buf_matrix_right[y_pos] &= ~(0b1 << x_pos)
 
     def set_pair(self, chars: str) -> None:
         """Set a character pair.
         """
-        assert type(chars) is str
+        assert isinstance(chars, str)
         assert len(chars) == 2
 
         self.set_character(0, chars[0])
         self.set_character(5, chars[1])
 
-    def set_character(self, x: int, char: str) -> None:
+    def set_character(self, x_offset: int, char: str) -> None:
         """Set a single character.
 
         The charcater x position is 0 for left, 5 for right.
         The charcter is a string character or ordinal.
         """
-        if type(char) is not int:
+        if not isinstance(char, int):
             char = ord(char)
         char = LTP305.font[char]
         for char_x in range(5):
             for char_y in range(8):
-                c = char[char_x] & (0b1 << char_y)
-                self.set_pixel(x + char_x, char_y, c != 0)
+                state = char[char_x] & (0b1 << char_y)
+                self.set_pixel(x_offset + char_x, char_y, state != 0)
 
     def show(self) -> None:
         """Update the LED matrix from the buffer.
         """
-        self._bus.writeto_mem(self._address, LTP305.CMD_MATRIX_L, bytearray(self._buf_matrix_left))
-        self._bus.writeto_mem(self._address, LTP305.CMD_MATRIX_R, bytearray(self._buf_matrix_right))
-        self._bus.writeto_mem(self._address, LTP305.CMD_MODE, LTP305.MODE.to_bytes(1, 'big'))
-        self._bus.writeto_mem(self._address, LTP305.CMD_OPTIONS, LTP305.OPTS.to_bytes(1, 'big'))
-        self._bus.writeto_mem(self._address, LTP305.CMD_BRIGHTNESS, self._brightness.to_bytes(1, 'big'))
-        self._bus.writeto_mem(self._address, LTP305.CMD_UPDATE, LTP305.UPDATE.to_bytes(1, 'big'))
- 
- 
+        self._bus.writeto_mem(self._address, LTP305.CMD_MATRIX_L,
+                              bytearray(self._buf_matrix_left))
+        self._bus.writeto_mem(self._address, LTP305.CMD_MATRIX_R,
+                              bytearray(self._buf_matrix_right))
+        self._bus.writeto_mem(self._address, LTP305.CMD_MODE,
+                              LTP305.MODE.to_bytes(1, 'big'))
+        self._bus.writeto_mem(self._address, LTP305.CMD_OPTIONS,
+                              LTP305.OPTS.to_bytes(1, 'big'))
+        self._bus.writeto_mem(self._address, LTP305.CMD_BRIGHTNESS,
+                              self._brightness.to_bytes(1, 'big'))
+        self._bus.writeto_mem(self._address, LTP305.CMD_UPDATE,
+                              LTP305.UPDATE.to_bytes(1, 'big'))
+
+
 if __name__ == '__main__':
 
     display: LTP305 = LTP305(_I2C, brightness=1.0)
