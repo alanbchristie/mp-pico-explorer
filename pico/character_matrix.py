@@ -9,7 +9,6 @@ try:
     from typing import Optional
 except ImportError:
     pass
-import time
 
 from machine import I2C, Pin
 
