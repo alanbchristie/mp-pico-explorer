@@ -29,14 +29,14 @@ _DOTW: List[str] = ['-', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 # - seconds (0-60)
 # - minutes (0-60)
 # - hours (0-23)
-# - day of the week (1-7 -> mon-sun)
+# - day of the week (0-6 -> mon-sun)
 # - day of month (1-31)
 # - month (1-12)
 # - year (2000-2099)
 #
-# i.e. to set to 14:46 20-Dec-21...
+# i.e. to set to 14:46 20-Dec-21 (a Monday)...
 #
-# >>> _RTC.set_time(0, 46, 14, 1, 20, 12, 2021)
+# >>> _RTC.set_time(0, 46, 14, 0, 20, 12, 2021)
 # >>> _RTC.set_backup_switchover_mode(3)
 
 
